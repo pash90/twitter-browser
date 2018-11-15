@@ -17,6 +17,7 @@ interface HeaderStateProps {
 
 /** Styles */
 import './index.scss';
+import { NavLink } from 'react-router-dom';
 
 class Header extends React.Component<{}, HeaderStateProps> {
 	constructor(props: {}) {
@@ -55,7 +56,9 @@ class Header extends React.Component<{}, HeaderStateProps> {
 				<Container>
 					<Row>
 						<Col xs={6} className='section'>
-							<h3>Twttr</h3>
+							<h3>
+								<NavLink to='/'>Twttr</NavLink>
+							</h3>
 						</Col>
 
 						<Hidden xs>
