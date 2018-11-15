@@ -11,6 +11,7 @@
 		"connected-react-router": "^5.0.1",
 		"history": "^4.7.2",
 		"node-sass": "^4.10.0",
+		"numeral": "^2.0.6",
 		"react": "^16.6.3",
 		"react-dom": "^16.6.3",
 		"react-grid-system": "^4.3.1",
@@ -40,6 +41,7 @@
 	],
 	"devDependencies": {
 		"@types/history": "^4.7.2",
+		"@types/numeral": "^0.0.25",
 		"@types/react-redux": "^6.0.9",
 		"@types/react-router": "^4.4.1",
 		"@types/react-router-dom": "^4.3.1",
