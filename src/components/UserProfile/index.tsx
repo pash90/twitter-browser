@@ -5,13 +5,15 @@ import { connect } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import { Container, Row, Col } from 'react-grid-system';
 import { push } from 'connected-react-router';
+import numeral from 'numeral';
 
 /** Helpers */
 import store from '../../store';
-import { getUserById } from '../../actions';
+import { getUserById, getTweetsForUserById } from '../../actions';
 
 /** Interfaces */
-import { SearchResult, AppState } from '../../types';
+import { AppState, Tweet } from '../../types';
+import { User, Entities } from 'twitter-d';
 
 interface MatchProps {
 	userId?: string;
@@ -20,7 +22,8 @@ interface MatchProps {
 interface UserProfileProps extends RouteComponentProps<MatchProps> {}
 
 interface UserProfileStateProps {
-	profile?: SearchResult;
+	profile?: User;
+	tweets?: Tweet[];
 }
 
 /** Styles */
@@ -44,13 +47,39 @@ class UserProfile extends React.Component<
 			dispatch(push('/'));
 		} else {
 			getUserById(userId);
+			getTweetsForUserById(userId);
 		}
 	}
 
-	render() {
-		const { profile } = this.props;
+	linkifyText = (text: string, entities: Entities) => {
+		if (!entities.user_mentions) {
+			return text;
+		}
 
-		if (!profile) {
+		return entities.user_mentions.reduce((reduction, userMention) => {
+			return reduction.replace(
+				`@${userMention.screen_name}`,
+				`<a href="${`https://twitter.com/${
+					userMention.screen_name
+				}`}" target="_blank" rel="noopener noreferrer">@${
+					userMention.screen_name
+				}</a>`
+			);
+		}, text);
+	};
+
+	formatNumber = (count: number) => {
+		return numeral(count)
+			.format('0.0a')
+			.replace('k', 'K')
+			.replace('m', 'M')
+			.replace('b', 'B');
+	};
+
+	render() {
+		const { profile, tweets } = this.props;
+
+		if (!profile || !tweets) {
 			return (
 				<Container>
 					<Row>
@@ -67,12 +96,13 @@ class UserProfile extends React.Component<
 			profile_image_url_https,
 			profile_link_color,
 			screen_name,
-			description
+			description,
+			followers_count
 		} = profile;
 		return (
 			<Container>
 				<Row className='user-profile'>
-					<Col xs={12} sm={5} md={3} className='sidebar' debug>
+					<Col xs={12} sm={5} md={3} className='sidebar'>
 						<div className='img-container'>
 							<img
 								src={profile_image_url_https.replace('_normal', '_400x400')}
@@ -90,13 +120,42 @@ class UserProfile extends React.Component<
 							@{screen_name}
 						</a>
 
-						<div className='about'>
-							<p>{description}</p>
+						{description && description.length > 0 && (
+							<div className='about'>
+								<p>{description}</p>
+							</div>
+						)}
+
+						<div className='follower-count'>
+							<p>{this.formatNumber(followers_count)}</p>
 						</div>
 					</Col>
 
-					<Col xs={12} sm={7} md={9} debug>
-						Tweets
+					<Col
+						xs={12}
+						sm={6}
+						md={8}
+						offset={{ xs: 0, sm: 1 }}
+						className='tweets'>
+						{tweets.map((tweet, index) => {
+							return (
+								<div className='tweet' key={index}>
+									<img
+										src={tweet.user.profile_image_url_https.replace(
+											'_normal',
+											'_bigger'
+										)}
+										alt='profile picture'
+									/>
+
+									<p
+										dangerouslySetInnerHTML={{
+											__html: this.linkifyText(tweet.text, tweet.entities)
+										}}
+									/>
+								</div>
+							);
+						})}
 					</Col>
 				</Row>
 			</Container>
@@ -106,7 +165,8 @@ class UserProfile extends React.Component<
 
 const mapStateToProps = (state: AppState): UserProfileStateProps => {
 	return {
-		profile: state.search.current
+		profile: state.search.current,
+		tweets: state.search.currentTweets
 	};
 };
 

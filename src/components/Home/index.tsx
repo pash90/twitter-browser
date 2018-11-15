@@ -8,10 +8,11 @@ import { Container, Row, Col } from 'react-grid-system';
 import Result from './Result';
 
 /** Interfaces */
-import { SearchResult, AppState } from '../../types';
+import { AppState } from '../../types';
+import { User } from 'twitter-d';
 
 interface HomeStateProps {
-	results?: SearchResult[];
+	results?: User[];
 	isSearching: boolean;
 }
 

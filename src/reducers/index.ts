@@ -27,6 +27,12 @@ const SearchReducer = (
 		case 'STOP_SEARCH':
 			return { ...state, isSearching: false };
 
+		case 'SET_CURRENT_USER_TWEETS':
+			return {
+				...state,
+				currentTweets: action.payload
+			};
+
 		default:
 			return state;
 	}

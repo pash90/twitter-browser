@@ -4,9 +4,9 @@ import { Col } from 'react-grid-system';
 import { NavLink } from 'react-router-dom';
 
 /** Interfaces */
-import { SearchResult } from '../../types';
+import { User } from 'twitter-d';
 
-interface ResultProps extends SearchResult {}
+interface ResultProps extends User {}
 
 class Result extends React.Component<ResultProps> {
 	render() {

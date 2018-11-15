@@ -3,7 +3,10 @@ import Axios, { AxiosResponse, AxiosError } from 'axios';
 
 /** Helpers */
 import store from '../store';
-import { SearchResult, SearchError } from '../types';
+
+/** Interfaces */
+import { User } from 'twitter-d';
+import { SearchError } from '../types';
 
 /** Initialisation */
 const axiosInstance = Axios.create({
@@ -39,7 +42,7 @@ export const searchTwitter = (query: string) => {
 				q: query
 			}
 		})
-		.then((response: AxiosResponse<{ data: SearchResult[] }>) => {
+		.then((response: AxiosResponse<{ data: User[] }>) => {
 			dispatch({
 				type: 'SET_SEARCH_RESULTS',
 				payload: response.data.data
@@ -59,9 +62,25 @@ export const getUserById = (id: string) => {
 				id
 			}
 		})
-		.then((response: AxiosResponse<{ data: SearchResult }>) => {
+		.then((response: AxiosResponse<{ data: User }>) => {
 			dispatch({
 				type: 'SET_CURRENT_USER',
+				payload: response.data.data
+			});
+		})
+		.catch(errorHandler);
+};
+
+export const getTweetsForUserById = (id: string) => {
+	axiosInstance
+		.get('/getTweetsForUser', {
+			params: {
+				id
+			}
+		})
+		.then((response: AxiosResponse<{ data: User }>) => {
+			dispatch({
+				type: 'SET_CURRENT_USER_TWEETS',
 				payload: response.data.data
 			});
 		})
