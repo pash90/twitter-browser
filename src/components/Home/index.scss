@@ -1,3 +1,17 @@
+.empty-state {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	height: calc(100vh - 64px);
+
+	h3 {
+		color: #d8d8d8;
+		text-align: center;
+		margin-top: 24px;
+	}
+}
+
 .loading {
 	display: flex;
 	align-items: center;

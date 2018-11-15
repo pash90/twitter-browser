@@ -123,3 +123,13 @@
 		}
 	}
 }
+
+@media only screen and (max-width: 575px) {
+	.user-profile {
+		.sidebar {
+			.img-container {
+				max-width: 192px;
+			}
+		}
+	}
+}

@@ -13,6 +13,7 @@ import search from '../../assets/search.svg';
 /** Interfaces */
 interface HeaderStateProps {
 	query?: string;
+	isSearching: boolean;
 }
 
 /** Styles */
@@ -23,7 +24,9 @@ class Header extends React.Component<{}, HeaderStateProps> {
 	constructor(props: {}) {
 		super(props);
 
-		this.state = {};
+		this.state = {
+			isSearching: false
+		};
 	}
 
 	updateQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,17 +51,33 @@ class Header extends React.Component<{}, HeaderStateProps> {
 		store.dispatch(push('/'));
 	};
 
+	toggleSearchBar = () =>
+		this.setState(prevState => ({
+			isSearching: !prevState.isSearching
+		}));
+
 	render() {
-		const { query } = this.state;
+		const { query, isSearching } = this.state;
 
 		return (
 			<header>
 				<Container>
 					<Row>
-						<Col xs={6} className='section'>
-							<h3>
-								<NavLink to='/'>Twttr</NavLink>
-							</h3>
+						<Col xs={9} sm={6} className='section'>
+							{isSearching ? (
+								<div className='input' style={{ width: '100%' }}>
+									<input
+										autoFocus
+										onChange={this.updateQuery}
+										placeholder='Search Twitter'
+										onKeyDown={this.onKeyPress}
+									/>
+								</div>
+							) : (
+								<h3>
+									<NavLink to='/'>Twttr</NavLink>
+								</h3>
+							)}
 						</Col>
 
 						<Hidden xs>
@@ -79,9 +98,9 @@ class Header extends React.Component<{}, HeaderStateProps> {
 						</Hidden>
 
 						<Visible xs>
-							<Col xs={6} className='section'>
+							<Col xs={3} className='section'>
 								<div className='input'>
-									<button>
+									<button onClick={this.toggleSearchBar}>
 										<img src={search} alt='search icon' />
 									</button>
 								</div>

@@ -7,6 +7,9 @@ import { Container, Row, Col } from 'react-grid-system';
 /** Components */
 import Result from './Result';
 
+/** Assets */
+import twitter from '../../assets/Twitter.svg';
+
 /** Interfaces */
 import { AppState } from '../../types';
 import { User } from 'twitter-d';
@@ -22,6 +25,22 @@ import './index.scss';
 class Home extends React.Component<HomeStateProps> {
 	render() {
 		const { results, isSearching } = this.props;
+
+		if (!isSearching && !results) {
+			return (
+				<Container>
+					<Row>
+						<Col className='empty-state'>
+							<img src={twitter} alt='twitter logo' />
+							<h3>
+								{' '}
+								Search for users by name, handle, company and other attributes
+							</h3>
+						</Col>
+					</Row>
+				</Container>
+			);
+		}
 
 		if (isSearching) {
 			return (
