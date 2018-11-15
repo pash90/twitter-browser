@@ -1,9 +1,11 @@
 /** Libraries */
 import React from 'react';
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
+import { push } from 'connected-react-router';
 
 /** Helpers */
 import { searchTwitter } from '../../actions';
+import store from '../../store';
 
 /** Assets */
 import search from '../../assets/search.svg';
@@ -41,6 +43,8 @@ class Header extends React.Component<{}, HeaderStateProps> {
 		const { query } = this.state;
 
 		searchTwitter(query as string);
+
+		store.dispatch(push('/'));
 	};
 
 	render() {

@@ -10,6 +10,7 @@ import numeral from 'numeral';
 /** Helpers */
 import store from '../../store';
 import { getUserById, getTweetsForUserById } from '../../actions';
+import { getLinkifyComponent } from './helper';
 
 /** Interfaces */
 import { AppState, Tweet } from '../../types';
@@ -51,22 +52,11 @@ class UserProfile extends React.Component<
 		}
 	}
 
-	linkifyText = (text: string, entities: Entities) => {
-		if (!entities.user_mentions) {
-			return text;
-		}
-
-		return entities.user_mentions.reduce((reduction, userMention) => {
-			return reduction.replace(
-				`@${userMention.screen_name}`,
-				`<a href="${`https://twitter.com/${
-					userMention.screen_name
-				}`}" target="_blank" rel="noopener noreferrer">@${
-					userMention.screen_name
-				}</a>`
-			);
-		}, text);
-	};
+	componentWillUnmount() {
+		store.dispatch({
+			type: 'REMOVE_CURRENT_USER'
+		});
+	}
 
 	formatNumber = (count: number) => {
 		return numeral(count)
@@ -148,11 +138,7 @@ class UserProfile extends React.Component<
 										alt='profile picture'
 									/>
 
-									<p
-										dangerouslySetInnerHTML={{
-											__html: this.linkifyText(tweet.text, tweet.entities)
-										}}
-									/>
+									{getLinkifyComponent(tweet.text, tweet.entities)}
 								</div>
 							);
 						})}

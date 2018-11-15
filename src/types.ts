@@ -1,5 +1,3 @@
-/// <reference types="react-scripts" />
-
 /** Libraries */
 import { RouterState } from 'connected-react-router';
 import { User, Coordinates, Entities, Place } from 'twitter-d';

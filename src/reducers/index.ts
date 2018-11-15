@@ -33,6 +33,9 @@ const SearchReducer = (
 				currentTweets: action.payload
 			};
 
+		case 'REMOVE_CURRENT_USER':
+			return { ...state, current: undefined };
+
 		default:
 			return state;
 	}
